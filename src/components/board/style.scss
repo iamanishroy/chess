@@ -14,6 +14,15 @@
     align-items: center;
     img {
       height: 80%;
+      z-index: 1;
+    }
+    .circle {
+      height: 33%;
+      width: 33%;
+      background-color: #b2a7fc;
+      border-radius: 50%;
+      display: none;
+      position: absolute;
     }
     &.white-box {
       background-color: #e8edf9;
