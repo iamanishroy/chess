@@ -48,7 +48,13 @@ const DEFAULT_POSITIONS = {
   H7: "p",
 };
 
-const getImage = (p) => {
+const getImage = (piece) => {
+  let p = null;
+  if (piece && piece?.color === "b") {
+    p = piece?.type.toLowerCase();
+  } else {
+    p = piece?.type.toUpperCase();
+  }
   switch (p) {
     case "p":
       return <PawnBlack />;
@@ -80,7 +86,7 @@ const getImage = (p) => {
 };
 
 const getPieces = (l, i, positions = DEFAULT_POSITIONS) => {
-  return <>{getImage(positions[l + i])}</>;
+  return <>{getImage(positions[8 - i][l.charCodeAt(0) - 97])}</>;
 };
 
 export default getPieces;

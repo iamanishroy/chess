@@ -1,34 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style.scss";
 import getPieces from "./getPieces";
-import { Game } from "js-chess-engine";
-const game = new Game();
+import Chess from "chess.js";
+const game = new Chess();
 const Board = () => {
   // const [game] = useState(new Game());
   const [currentSelected, setCurrentSelected] = useState(null);
-  const [positions, setPositions] = useState(game.exportJson().pieces);
+  const [positions, setPositions] = useState(game.board());
+  // console.log(positions);
   // alert(positions);
-  useEffect(() => {
-    console.log(game);
-  }, [positions]);
+  // useEffect(() => {
+  //   console.log(game);
+  // }, [positions]);
   const handleClick = (l, i) => {
     if (currentSelected) {
-      let prevMoves = game.moves(currentSelected[0] + currentSelected[1]);
+      let prevMoves = game.moves({
+        square: currentSelected[0] + currentSelected[1],
+        verbose: true,
+      });
       prevMoves.forEach((pm) => {
-        if (pm === l + i) {
-          game.move(currentSelected[0] + currentSelected[1], l + i);
+        if (pm.to === l + i) {
+          if (pm.flags.indexOf("p") >= 0) {
+            game.move({
+              from: currentSelected[0] + currentSelected[1],
+              to: l + i,
+              promotion: pm.promotion,
+            });
+          } else {
+            game.move({
+              from: currentSelected[0] + currentSelected[1],
+              to: l + i,
+            });
+          }
           setCurrentSelected(null);
-          setPositions(game.exportJson().pieces);
+          setPositions(game.board());
         }
       });
     }
 
-    let moves = game.moves(l + i);
+    let moves = game.moves({ square: l + i, verbose: true });
+    document.querySelectorAll(".piece-box").forEach((e) => {
+      e.removeAttribute("style");
+    });
     document.querySelectorAll(".circle").forEach((e) => {
       e.style.display = "none";
     });
     moves.forEach((m) => {
-      document.querySelector("#" + m + " div").style.display = "unset";
+      if (m.flags === "c") {
+        document.getElementById(m.to).style.backgroundColor = "#b2a7fc";
+      } else {
+        document.querySelector("#" + m.to + " div").style.display = "unset";
+      }
     });
     if (moves.length > 0) {
       setCurrentSelected([l, i]);
@@ -48,7 +70,7 @@ const Board = () => {
               Array(8)
                 .fill()
                 .map((e, index) =>
-                  String.fromCharCode("A".charCodeAt(0) + index)
+                  String.fromCharCode("a".charCodeAt(0) + index)
                 )
                 .map((l, li) => (
                   <div
