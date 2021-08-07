@@ -33,6 +33,14 @@ const Board = () => {
             });
           }
           setCurrentSelected(null);
+          // console.log(game.fen());
+          if (game.game_over()) {
+            alert(
+              `game over winner:- ${game.turn()} -> ${
+                game.turn() === "w" ? "black" : "white"
+              }`
+            );
+          }
           setPositions(game.board());
         }
       });
