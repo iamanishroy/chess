@@ -1,22 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.scss";
 import getPieces from "./getPieces";
 import Chess from "chess.js";
-
 import { useParams } from "react-router-dom";
+
+import checkId from "functions/checkId";
 
 const game = new Chess();
 
 const Board = () => {
-  const { token } = useParams();
-  // const [game] = useState(new Game());
+  const { matchId } = useParams();
+  const [matchIdChecked, setMatchIdChecked] = useState(false);
+  const [match, setMatch] = useState(null);
+  useEffect(() => {
+    checkId(matchId).then((res) => {
+      if (res) {
+        if (res.u2) {
+          // match already started
+          alert("already started");
+        } else {
+          // register u2
+          setMatch(res.matchId);
+        }
+        console.log(res);
+      } else {
+        console.log("No game");
+      }
+      setMatchIdChecked(true);
+    });
+  }, [matchId]);
+
   const [currentSelected, setCurrentSelected] = useState(null);
   const [positions, setPositions] = useState(game.board());
-  // console.log(positions);
-  // alert(positions);
-  // useEffect(() => {
-  //   console.log(game);
-  // }, [positions]);
+
   const handleClick = (l, i) => {
     if (currentSelected) {
       let prevMoves = game.moves({
@@ -74,35 +90,45 @@ const Board = () => {
 
   return (
     <>
-      <p>{token}</p>
-      {positions && (
-        <div className="chess-table">
-          {Array(8)
-            .fill()
-            .map((e, index) => 8 - index)
-            .map((i, ni) =>
-              Array(8)
-                .fill()
-                .map((e, index) =>
-                  String.fromCharCode("a".charCodeAt(0) + index)
-                )
-                .map((l, li) => (
-                  <div
-                    key={`${l}${i}`}
-                    id={`${l}${i}`}
-                    onClick={() => {
-                      handleClick(l, i);
-                    }}
-                    className={`piece-box ${
-                      ni % 2 === li % 2 ? "black-box" : "white-box"
-                    }`}
-                  >
-                    <div className="circle"></div>
-                    {getPieces(l, i, positions)}
-                  </div>
-                ))
+      {matchIdChecked ? (
+        match ? (
+          <>
+            <p>{matchId}</p>
+            {positions && (
+              <div className="chess-table">
+                {Array(8)
+                  .fill()
+                  .map((e, index) => 8 - index)
+                  .map((i, ni) =>
+                    Array(8)
+                      .fill()
+                      .map((e, index) =>
+                        String.fromCharCode("a".charCodeAt(0) + index)
+                      )
+                      .map((l, li) => (
+                        <div
+                          key={`${l}${i}`}
+                          id={`${l}${i}`}
+                          onClick={() => {
+                            handleClick(l, i);
+                          }}
+                          className={`piece-box ${
+                            ni % 2 === li % 2 ? "black-box" : "white-box"
+                          }`}
+                        >
+                          <div className="circle"></div>
+                          {getPieces(l, i, positions)}
+                        </div>
+                      ))
+                  )}
+              </div>
             )}
-        </div>
+          </>
+        ) : (
+          <>No Game</>
+        )
+      ) : (
+        <>checkId</>
       )}
     </>
   );

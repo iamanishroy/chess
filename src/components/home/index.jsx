@@ -1,11 +1,24 @@
 import React from "react";
 import { useAuth } from "contexts/auth";
-import shortid from "shortid";
+import { useHistory } from "react-router-dom";
+import startLinkGame from "functions/startGame";
 const Home = () => {
-  const { signOut } = useAuth();
+  const history = useHistory();
+  const { currentUser, signOut } = useAuth();
 
-  const startLinkGame = () => {
-    alert(shortid.generate());
+  const startGameWithLink = () => {
+    startLinkGame(currentUser)
+      .then((matchId) => {
+        if (matchId) {
+          alert(matchId);
+          history.push("/play/" + matchId);
+        } else {
+          console.log("error");
+        }
+      })
+      .catch(() => {
+        console.log("err");
+      });
   };
   return (
     <>
@@ -15,7 +28,7 @@ const Home = () => {
       <br />
       <br />
 
-      <button onClick={startLinkGame}>start Game</button>
+      <button onClick={startGameWithLink}>start Game</button>
     </>
   );
 };

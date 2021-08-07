@@ -17,7 +17,7 @@ function App() {
         <div className="App">
           <Switch>
             <Route path="/auth" component={Auth} />
-            <PrivateRoute exact path="/play/:token" component={Board} />
+            <PrivateRoute exact path="/play/:matchId" component={Board} />
             <PrivateRoute path="/" component={Home} />
           </Switch>
         </div>
