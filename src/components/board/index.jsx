@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import "./style.scss";
 import getPieces from "./getPieces";
 import Chess from "chess.js";
+
+import { useParams } from "react-router-dom";
+
 const game = new Chess();
+
 const Board = () => {
+  const { token } = useParams();
   // const [game] = useState(new Game());
   const [currentSelected, setCurrentSelected] = useState(null);
   const [positions, setPositions] = useState(game.board());
@@ -69,6 +74,7 @@ const Board = () => {
 
   return (
     <>
+      <p>{token}</p>
       {positions && (
         <div className="chess-table">
           {Array(8)
