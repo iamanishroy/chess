@@ -3,32 +3,82 @@ import "./style.scss";
 import getPieces from "./getPieces";
 import Chess from "chess.js";
 import { useParams } from "react-router-dom";
-
+import { useAuth } from "contexts/auth";
+import setSecondUser, { presence } from "functions/user";
 import checkId from "functions/checkId";
+import { db } from "adapter";
+import updateFEN from "functions/match";
 
 const game = new Chess();
 
+// TODO: only jiska chance hoga wohi change kr payga
+
 const Board = () => {
+  const { currentUser } = useAuth();
+
   const { matchId } = useParams();
   const [matchIdChecked, setMatchIdChecked] = useState(false);
   const [match, setMatch] = useState(null);
   useEffect(() => {
+    const subscribeToMatch = (matchId) => {
+      db.ref("match/" + matchId).on("value", (snapshot) => {
+        if (snapshot.val()) {
+          // check for over TODO:
+          let newMatchData = snapshot.val();
+          game.load(newMatchData.fen);
+          setPositions(game.board());
+        }
+      });
+    };
     checkId(matchId).then((res) => {
       if (res) {
-        if (res.u2) {
-          // match already started
-          alert("already started");
-        } else {
-          // register u2
-          setMatch(res.matchId);
-        }
         console.log(res);
+        if (res.u1.u === currentUser.uid) {
+          // already in match its just a refresh
+          // set first user as own
+          // set second user as another
+          setMatch(res.matchId);
+          // console.log(res.fen);
+          game.load(res.fen);
+          setPositions(game.board());
+          // subscribe to change
+          subscribeToMatch(res.matchId);
+          presence(res.matchId, "u1");
+        } else if (res.u2?.u === currentUser.uid) {
+          // already in match its just a refresh
+          // set first user as another
+          // set second user as own
+          setMatch(res.matchId);
+          console.log(res.fen);
+          game.load(res.fen);
+          setPositions(game.board());
+          // subscribe to change
+          subscribeToMatch(res.matchId);
+          presence(res.matchId, "u2");
+        } else {
+          if (res.u2) {
+            // match already started
+            alert("already started");
+            // exit
+          } else {
+            // register 2
+            setSecondUser(res.matchId, currentUser);
+            // set first user as another
+            // set second user as own
+            setMatch(res.matchId);
+            game.load(res.fen);
+            setPositions(game.board());
+            // subscribe to change
+            subscribeToMatch(res.matchId);
+            presence(res.matchId, "u2");
+          }
+        }
       } else {
         console.log("No game");
       }
       setMatchIdChecked(true);
     });
-  }, [matchId]);
+  }, [matchId, currentUser]);
 
   const [currentSelected, setCurrentSelected] = useState(null);
   const [positions, setPositions] = useState(game.board());
@@ -63,6 +113,7 @@ const Board = () => {
             );
           }
           setPositions(game.board());
+          updateFEN(match, game.fen());
         }
       });
     }

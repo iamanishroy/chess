@@ -13,6 +13,7 @@ const checkId = async (matchId) => {
         u1: matchData.u1,
         u2: matchData.u2,
         matchId: matchId,
+        fen: matchData.fen,
       };
     } else {
       return false;
