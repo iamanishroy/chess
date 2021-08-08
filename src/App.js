@@ -6,7 +6,7 @@ import { useAuth } from "contexts/auth";
 
 import SnackbarProvider from "react-simple-snackbar";
 
-import Board from "./components/board";
+import Playground from "./components/playground/";
 import Auth from "components/auth";
 import Home from "components/home";
 
@@ -17,7 +17,7 @@ function App() {
         <div className="App">
           <Switch>
             <Route path="/auth" component={Auth} />
-            <PrivateRoute exact path="/play/:matchId" component={Board} />
+            <PrivateRoute exact path="/play/:matchId" component={Playground} />
             <PrivateRoute path="/" component={Home} />
           </Switch>
         </div>

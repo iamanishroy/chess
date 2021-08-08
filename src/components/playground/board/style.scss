@@ -1,3 +1,11 @@
+.playground {
+  display: flex;
+  .left,
+  .right {
+    width: 50%;
+  }
+}
+
 .chess-table {
   height: 700px;
   width: 700px;

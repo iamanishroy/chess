@@ -2,7 +2,8 @@ import { db } from "adapter";
 import visibility from "visibilityjs";
 
 const setSecondUser = (matchId, user) => {
-  db.ref("match/" + matchId)
+  return db
+    .ref("match/" + matchId)
     .update({
       u2: {
         u: user.uid,
@@ -43,6 +44,9 @@ const presence = (matchId, user) => {
       updatePresence("offline");
     }
   });
+  db.ref("match/" + matchId + "/" + user)
+    .onDisconnect()
+    .update({ o: "offline" });
 };
 
 export { presence };
