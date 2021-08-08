@@ -31,15 +31,15 @@ const Board = ({ game, match, positions, setPositions, myTurn }) => {
             }
             setCurrentSelected(null);
             // console.log(game.fen());
-            if (game.game_over()) {
-              alert(
-                `game over winner:- ${game.turn()} -> ${
-                  game.turn() === "w" ? "black" : "white"
-                }`
-              );
-            }
             setPositions(game.board());
             updateFEN(match, game.fen());
+            // if (game.game_over()) {
+            //   alert(
+            //     `game over winner:- ${game.turn()} -> ${
+            //       game.turn() === "w" ? "black" : "white"
+            //     }`
+            //   );
+            // }
           }
         });
       }

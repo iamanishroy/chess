@@ -10,6 +10,14 @@ import Details from "./details";
 
 const game = new Chess();
 
+/*
+TODO: change view on u2
+TODO: timer
+TODO: on end(draw, winner)
+TODO: on promotion
+TODO: don't update on own move
+*/
+
 const Playground = () => {
   const { currentUser } = useAuth();
   const [positions, setPositions] = useState(game.board());
@@ -27,14 +35,21 @@ const Playground = () => {
     const subscribeToMatch = (matchId) => {
       db.ref("match/" + matchId).on("value", (snapshot) => {
         if (snapshot.val()) {
+          // check if previous(own move) then don't change/ execute TODO:
           let newMatchData = snapshot.val();
           setUser1(newMatchData.u1);
           setUser2(newMatchData.u2);
 
-          // check for over TODO:
           game.load(newMatchData.fen);
           setPositions(game.board());
-
+          // check for over
+          if (game.game_over()) {
+            alert(
+              `game over winner:- ${game.turn()} -> ${
+                game.turn() === "w" ? "black" : "white"
+              }`
+            );
+          }
           // set my turn
           setMyTurn(
             (me === 1 && game.turn() === "w") ||
