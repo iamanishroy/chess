@@ -11,11 +11,12 @@ import Details from "./details";
 const game = new Chess();
 
 /*
-TODO: change view on u2
-TODO: timer
+TODO: change view on u2 (solved by {me})
+TODO: timer -> 
 TODO: on end(draw, winner)
-TODO: on promotion
+TODO: on promotion // ui
 TODO: don't update on own move
+TODO: save matchId if not logged in 
 */
 
 const Playground = () => {
@@ -44,6 +45,9 @@ const Playground = () => {
           setPositions(game.board());
           // check for over
           if (game.game_over()) {
+            // draw
+            // winner
+            // repetition
             alert(
               `game over winner:- ${game.turn()} -> ${
                 game.turn() === "w" ? "black" : "white"
@@ -142,6 +146,7 @@ const Playground = () => {
                 positions={positions}
                 setPositions={setPositions}
                 myTurn={myTurn}
+                me={me}
               />
             </div>
           </div>

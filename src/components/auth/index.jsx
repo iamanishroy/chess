@@ -5,7 +5,12 @@ import { useSnackbar } from "react-simple-snackbar";
 
 const Auth = () => {
   const [openSnackbar] = useSnackbar();
-  const { currentUser, signInWithGoogle, signInWithFacebook } = useAuth();
+  const {
+    currentUser,
+    signInWithGoogle,
+    signInWithFacebook,
+    signInWithMicrosoft,
+  } = useAuth();
 
   async function signIn(provider) {
     let status = false;
@@ -15,6 +20,9 @@ const Auth = () => {
         break;
       case "facebook":
         status = await signInWithFacebook();
+        break;
+      case "microsoft":
+        status = await signInWithMicrosoft();
         break;
       default:
         status = await signInWithGoogle();
@@ -46,6 +54,14 @@ const Auth = () => {
             }}
           >
             facebook
+          </button>
+          <br />
+          <button
+            onClick={() => {
+              signIn("microsoft");
+            }}
+          >
+            microsoft
           </button>
         </>
       )}

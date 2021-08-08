@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "contexts/auth";
 import { useAuth } from "contexts/auth";
-
 import SnackbarProvider from "react-simple-snackbar";
 
 import Playground from "./components/playground/";
@@ -26,9 +25,16 @@ function App() {
   );
 }
 
-function PrivateRoute({ component: Component, ...rest }) {
+function PrivateRoute({ path, component: Component, ...rest }) {
   const { currentUser } = useAuth();
-
+  if (!currentUser) {
+    if (path.includes("/play/")) {
+      sessionStorage.setItem(
+        "link-matchId",
+        window.location.pathname.split("/")[2]
+      );
+    }
+  }
   return (
     <Route
       {...rest}

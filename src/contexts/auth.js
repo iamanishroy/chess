@@ -50,6 +50,14 @@ export function AuthProvider({ children }) {
     return await signInWithPopup(new auth.FacebookAuthProvider());
   }
 
+  async function signInWithMicrosoft() {
+    let provider = new auth.OAuthProvider("microsoft.com");
+    provider.setCustomParameters({
+      prompt: "consent",
+    });
+    return await signInWithPopup(provider);
+  }
+
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -69,6 +77,7 @@ export function AuthProvider({ children }) {
     updatePassword,
     signInWithGoogle,
     signInWithFacebook,
+    signInWithMicrosoft,
   };
 
   return (

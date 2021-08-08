@@ -3,9 +3,9 @@ import "./style.scss";
 import getPieces from "./getPieces";
 import updateFEN from "functions/match";
 
-// TODO: only jiska chance hoga wohi change kr payga
+// TODO: only jiska chance hoga wohi change kr payga = DONE
 
-const Board = ({ game, match, positions, setPositions, myTurn }) => {
+const Board = ({ game, match, positions, setPositions, myTurn, me }) => {
   const [currentSelected, setCurrentSelected] = useState(null);
 
   const handleClick = (l, i) => {
@@ -72,7 +72,7 @@ const Board = ({ game, match, positions, setPositions, myTurn }) => {
         <div className="chess-table">
           {Array(8)
             .fill()
-            .map((e, index) => 8 - index)
+            .map((e, index) => (me === 1 ? 8 - index : 1 + index))
             .map((i, ni) =>
               Array(8)
                 .fill()

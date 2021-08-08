@@ -1,6 +1,7 @@
 import React from "react";
 
 const Details = ({ user1, user2 }) => {
+  // console.log("rendered");
   return (
     <>
       <div>
