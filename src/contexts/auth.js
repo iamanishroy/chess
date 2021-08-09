@@ -9,9 +9,14 @@ export function useAuth() {
 async function signInWithPopup(provider) {
   try {
     await auth().signInWithPopup(provider);
-    return true;
+    return {
+      success: true,
+    };
   } catch (e) {
-    return false;
+    return {
+      success: false,
+      message: e.message,
+    };
   }
 }
 export function AuthProvider({ children }) {
@@ -51,11 +56,7 @@ export function AuthProvider({ children }) {
   }
 
   async function signInWithMicrosoft() {
-    let provider = new auth.OAuthProvider("microsoft.com");
-    provider.setCustomParameters({
-      prompt: "consent",
-    });
-    return await signInWithPopup(provider);
+    return await signInWithPopup(new auth.OAuthProvider("microsoft.com"));
   }
 
   useEffect(() => {

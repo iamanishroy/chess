@@ -1,5 +1,13 @@
+@import "util/media";
+
 .App {
   text-align: center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  @include phone {
+    display: unset;
+  }
 }
 
 .App-logo {

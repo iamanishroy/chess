@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import "./App.css";
+import "./App.scss";
 import { AuthProvider } from "contexts/auth";
 import { useAuth } from "contexts/auth";
 import SnackbarProvider from "react-simple-snackbar";

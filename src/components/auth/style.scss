@@ -1,0 +1,135 @@
+@import "util/media";
+
+.auth {
+  max-height: 100vh;
+  font-family: "Nunito", sans-serif;
+  width: 66%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @include smallDesktop {
+    width: 90%;
+  }
+  .main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    @include tablet {
+      justify-content: center;
+    }
+    .left {
+      margin: 22px 0;
+      width: 36%;
+      text-align: left;
+      position: relative;
+      @include tablet {
+        width: 70%;
+      }
+      @include phone {
+        width: 100%;
+        margin-top: 32px;
+      }
+
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .logo {
+          display: flex;
+          box-shadow: 4px 4px 16px 0 rgba(31, 38, 135, 0.37);
+          font-weight: 600;
+          border-radius: 6px;
+          div {
+            padding: 6px 18px;
+            font-size: 1.2rem;
+          }
+          .better {
+            background-color: #34364c;
+            color: #f4f7fa;
+            border-bottom-left-radius: 6px;
+            border-top-left-radius: 6px;
+          }
+          .chess {
+            background-color: #f4f7fa;
+            color: #34364c;
+            border-bottom-right-radius: 6px;
+            border-top-right-radius: 6px;
+          }
+        }
+        .theme {
+          height: 32px;
+          width: 32px;
+          background-color: #34364c;
+          border-radius: 50%;
+        }
+      }
+      .text {
+        font-size: 1.8rem;
+        margin: 36px 0 8px;
+      }
+      .disclaimer {
+        font-size: 1rem;
+      }
+      .call_to_action {
+        margin-top: 42px;
+        .login_buttons {
+          z-index: 1;
+          width: 100%;
+          margin: auto;
+          .login_button {
+            font-size: 1.1rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 28px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            svg {
+              margin: 10px 18px 10px 16%;
+              @include tablet {
+                margin: 10px 18px 10px 26%;
+              }
+              @include phone {
+                margin: 10px 18px 10px 16%;
+              }
+            }
+            transition: 0.25s;
+            &:hover {
+              cursor: pointer;
+              box-shadow: 0 12px 32px 0 rgba(31, 38, 135, 0.37);
+              transform: translateY(-8px);
+            }
+          }
+        }
+      }
+      .credit {
+        text-align: center;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 100%;
+        transform: translateX(-50%);
+        @include tablet {
+          text-align: center;
+          position: unset;
+          transform: unset;
+          margin-top: 32px;
+        }
+      }
+    }
+    .right {
+      @include tablet {
+        display: none;
+      }
+      width: 60%;
+      img {
+        width: 90%;
+      }
+    }
+  }
+}
