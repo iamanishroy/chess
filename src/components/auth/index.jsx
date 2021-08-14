@@ -41,13 +41,13 @@ const Auth = () => {
         <Redirect to="/" />
       ) : (
         <>
-          <div class="auth">
+          <div className="auth">
             <div className="main">
               <div className="left">
                 <div className="top">
-                  <div class="logo">
-                    <div class="better">better</div>
-                    <div class="chess">chess</div>
+                  <div className="logo">
+                    <div className="better">better</div>
+                    <div className="chess">chess</div>
                   </div>
                   <div className="theme"></div>
                 </div>
@@ -59,9 +59,9 @@ const Auth = () => {
                   This is an experimental project not for commercial use.
                 </div>
                 <div className="call_to_action">
-                  <div class="login_buttons">
+                  <div className="login_buttons">
                     <div
-                      class="login_button google_login_button"
+                      className="login_button google_login_button"
                       onClick={() => {
                         signIn("google");
                       }}
@@ -93,7 +93,7 @@ const Auth = () => {
                       <p>Continue with Google</p>
                     </div>
                     <div
-                      class="login_button facebook_login_button"
+                      className="login_button facebook_login_button"
                       onClick={() => {
                         signIn("facebook");
                       }}
@@ -117,7 +117,7 @@ const Auth = () => {
                       <p>Continue with Facebook</p>
                     </div>
                     <div
-                      class="login_button microsoft_login_button"
+                      className="login_button microsoft_login_button"
                       onClick={() => {
                         signIn("microsoft");
                       }}

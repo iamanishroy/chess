@@ -8,6 +8,7 @@ import SnackbarProvider from "react-simple-snackbar";
 import Playground from "./components/playground/";
 import Auth from "components/auth";
 import Home from "components/home";
+import Test from "components/test";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <div className="App">
           <Switch>
             <Route path="/auth" component={Auth} />
+            <Route path="/test" component={Test} />
             <PrivateRoute exact path="/play/:matchId" component={Playground} />
             <PrivateRoute path="/" component={Home} />
           </Switch>

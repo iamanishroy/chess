@@ -1,0 +1,3 @@
+"candidate:775101633 1 udp 1685921535 223.239.50.220 60708 typ srflx raddr 192.168.43.17 rport 60708 generation 0 ufrag OXaR network-id 1 network-cost 10"
+
+"candidate:775101633 1 udp 1685921535 223.239.50.220 64654 typ srflx raddr 192.168.43.17 rport 64654 generation 0 ufrag +XJ0 network-id 1 network-cost 10"
