@@ -1,4 +1,3 @@
-"use strict";
 const { useState, useEffect } = require("react");
 
 function getOnlineStatus() {
@@ -28,4 +27,4 @@ function useOnlineStatus() {
   return onlineStatus;
 }
 
-module.exports = useOnlineStatus;
+export default useOnlineStatus;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import getUserMedia from "getusermedia";
 import { useAuth } from "contexts/auth";
 import useOnlineStatus from "hooks/useOnlineStatus";
@@ -33,7 +33,7 @@ const User = ({ userNo, matchId, me, stream }) => {
       //   console.log(e);
       // });
     }
-  }, [matchId]);
+  }, [matchId, me, userNo, online, currentUser]);
   useEffect(() => {
     video.current.srcObject = stream;
   }, [stream]);
@@ -63,7 +63,7 @@ const User = ({ userNo, matchId, me, stream }) => {
 
 const Details = ({ matchId, me }) => {
   const { currentUser } = useAuth();
-  const peer = new Peer(currentUser.uid);
+  const peer = useMemo(() => new Peer(currentUser.uid), [currentUser]);
   const [u2, setU2] = useState(false);
   const [user1Stream, setUser1Stream] = useState();
   const [user2Stream, setUser2Stream] = useState();
@@ -74,6 +74,10 @@ const Details = ({ matchId, me }) => {
         if (me === 1) {
           // if previous was away then don't call
           getUserMedia((err, stream) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
             setUser1Stream(stream);
             const call = peer.call(snapshot.val().u, stream);
             call.on("stream", (remoteStream) => {
@@ -84,6 +88,10 @@ const Details = ({ matchId, me }) => {
           peer.on("call", (call) => {
             getUserMedia(
               (err, stream) => {
+                if (err) {
+                  console.log(err);
+                  return;
+                }
                 setUser2Stream(stream);
                 call.answer(stream); // Answer the call with an A/V stream.
                 call.on("stream", (remoteStream) => {
@@ -100,7 +108,7 @@ const Details = ({ matchId, me }) => {
         setU2(false);
       }
     });
-  }, [matchId]);
+  }, [matchId, me, peer]);
 
   // useEffect(() => {
   //   console.log("hi");
