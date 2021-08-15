@@ -1,0 +1,62 @@
+.panel {
+  .users {
+    .user {
+      margin: 0 20%;
+      .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 3px;
+        .profile {
+          display: flex;
+          align-items: center;
+          .picture {
+            height: 50px;
+            width: 50px;
+            img {
+              height: 100%;
+              width: 100%;
+              border-radius: 6px;
+            }
+          }
+          .text {
+            text-align: left;
+            margin-left: 12px;
+            .name {
+              font-size: 1.4rem;
+              font-weight: 700;
+            }
+            .status {
+              font-size: 1rem;
+              font-weight: 600;
+            }
+          }
+        }
+        .actions {
+          display: flex;
+          button {
+            height: 80%;
+            width: 80%;
+            padding: 5px;
+            font-size: 1.1rem;
+            background-color: #d1d1d1;
+            border: none;
+            border-radius: 6px;
+            &:first-child {
+              margin-right: 8px;
+            }
+          }
+        }
+      }
+    }
+    .video {
+      video {
+        width: 100%;
+        aspect-ratio: 2/1.25;
+        border-radius: 6px;
+        object-fit: cover;
+        transform: rotateY(180deg);
+      }
+    }
+  }
+}

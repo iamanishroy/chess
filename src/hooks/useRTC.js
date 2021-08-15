@@ -1,6 +1,6 @@
 // not in use
 import { useState, useEffect } from "react";
-import Peer from "peerjs";
+// import Peer from "peerjs";
 
 let once = true;
 export default function useRTC(uid) {
