@@ -9,6 +9,7 @@ const setSecondUser = (matchId, user) => {
         u: user.uid,
         n: user.displayName,
         p: user.photoURL,
+        o: "online",
       },
     })
     .then(() => {

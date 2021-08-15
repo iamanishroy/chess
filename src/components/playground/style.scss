@@ -1,0 +1,15 @@
+.playground {
+  width: 80vw;
+  height: 100vh;
+  display: flex;
+  margin: auto;
+  justify-content: space-between;
+  align-items: center;
+
+  .left {
+    width: 40%;
+  }
+  .right {
+    width: 58%;
+  }
+}

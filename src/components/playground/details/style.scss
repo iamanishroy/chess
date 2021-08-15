@@ -1,7 +1,25 @@
 .panel {
+  width: 100%;
+  // background-color: rgb(73, 116, 153);
+  .tab {
+    font-size: 1.2rem;
+    height: 2rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    margin: 0 auto 12px 6%;
+    span {
+      background-color: rgb(245, 139, 0);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+  }
   .users {
     .user {
-      margin: 0 20%;
+      margin: 0 6%;
+      &:first-child {
+        margin-bottom: 12px;
+      }
       .bar {
         display: flex;
         align-items: center;

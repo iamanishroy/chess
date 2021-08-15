@@ -1,16 +1,9 @@
-.playground {
-  display: flex;
-  .left,
-  .right {
-    width: 50%;
-  }
-}
 // white -> f4f7fa
 // black -> 34364c
 
 .chess-table {
-  height: 700px;
-  width: 700px;
+  height: 96%;
+  aspect-ratio: 1;
   display: flex;
   border: 3px solid black;
   flex-wrap: wrap;

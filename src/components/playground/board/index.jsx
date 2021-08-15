@@ -1,12 +1,43 @@
-import React, { useState } from "react";
-import "./style.scss";
+import React, { useState, useEffect } from "react";
+import { db } from "adapter";
 import getPieces from "./getPieces";
 import updateFEN from "functions/match";
+import Chess from "chess.js";
+import "./style.scss";
 
 // TODO: only jiska chance hoga wohi change kr payga = DONE
 
-const Board = ({ game, match, positions, setPositions, myTurn, me }) => {
+const game = new Chess();
+
+const Board = ({ matchId, me }) => {
   const [currentSelected, setCurrentSelected] = useState(null);
+  const [myTurn, setMyTurn] = useState(false);
+  const [positions, setPositions] = useState(game.board());
+
+  useEffect(() => {
+    db.ref("match/" + matchId + "/fen").on("value", (snapshot) => {
+      if (snapshot.val()) {
+        // check if previous(own move) then don't change/ execute TODO:
+        game.load(snapshot.val());
+        setPositions(game.board());
+        // check for over
+        if (game.game_over()) {
+          // draw
+          // winner
+          // repetition
+          alert(
+            `game over winner:- ${game.turn()} -> ${
+              game.turn() === "w" ? "black" : "white"
+            }`
+          );
+        }
+        // set my turn
+        setMyTurn(
+          (me === 1 && game.turn() === "w") || (me === 2 && game.turn() === "b")
+        );
+      }
+    });
+  }, [matchId, me]);
 
   const handleClick = (l, i) => {
     if (myTurn) {
@@ -32,7 +63,7 @@ const Board = ({ game, match, positions, setPositions, myTurn, me }) => {
             setCurrentSelected(null);
             // console.log(game.fen());
             setPositions(game.board());
-            updateFEN(match, game.fen());
+            updateFEN(matchId, game.fen());
             // if (game.game_over()) {
             //   alert(
             //     `game over winner:- ${game.turn()} -> ${
