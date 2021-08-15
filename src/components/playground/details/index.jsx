@@ -13,6 +13,7 @@ const User = ({ userNo, matchId, me, stream }) => {
   const [playerStatus, setPlayerStatus] = useState("");
 
   const online = useOnlineStatus();
+  const video = useRef();
 
   useEffect(() => {
     console.log("hi88");
@@ -33,7 +34,9 @@ const User = ({ userNo, matchId, me, stream }) => {
       // });
     }
   }, [matchId]);
-
+  useEffect(() => {
+    video.current.srcObject = stream;
+  }, [stream]);
   return (
     <div className="user">
       <div className="bar">
@@ -52,7 +55,7 @@ const User = ({ userNo, matchId, me, stream }) => {
         </div>
       </div>
       <div className="video">
-        <video id="webcamVideo" src={stream} autoPlay playsInline></video>
+        <video id="webcamVideo" ref={video} autoPlay playsInline></video>
       </div>
     </div>
   );
