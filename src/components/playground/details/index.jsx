@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import getUserMedia from "getusermedia";
 import { useAuth } from "contexts/auth";
 import useOnlineStatus from "hooks/useOnlineStatus";
-import "./style.scss";
 import { db } from "adapter";
 import Peer from "peerjs";
+import "./style.scss";
 
 const User = ({ userNo, matchId, me, stream }) => {
   const { currentUser } = useAuth();
@@ -16,7 +15,6 @@ const User = ({ userNo, matchId, me, stream }) => {
   const video = useRef();
 
   useEffect(() => {
-    console.log("hi88");
     if (userNo === me) {
       setPlayerName(currentUser.displayName);
       setPlayerPhotoURL(currentUser.photoURL);
@@ -29,9 +27,6 @@ const User = ({ userNo, matchId, me, stream }) => {
           setPlayerStatus(snapshot.val().o);
         }
       });
-      // .catch((e) => {
-      //   console.log(e);
-      // });
     }
   }, [matchId, me, userNo, online, currentUser]);
   useEffect(() => {
@@ -80,38 +75,31 @@ const Details = ({ matchId, me }) => {
         ) {
           if (me === 1) {
             // if previous was away then don't call
-            getUserMedia({ video: true, audio: false }, (err, stream) => {
-              if (err) {
-                console.log(err);
-                return;
-              }
-              setUser1Stream(stream);
-              console.log("calling...");
-              const call = peer.call(u2.u, stream);
-              call.on("stream", (remoteStream) => {
-                setUser2Stream(remoteStream);
+            navigator.mediaDevices
+              .getUserMedia({ video: true, audio: true })
+              .then((stream) => {
+                setUser1Stream(stream);
+                const call = peer.call(u2.u, stream);
+                call.on("stream", (remoteStream) => {
+                  setUser2Stream(remoteStream);
+                });
               });
-            });
           } else {
             peer.on("call", (call) => {
-              console.log(call);
-              getUserMedia(
-                { video: true, audio: false },
-                (err, stream) => {
-                  if (err) {
-                    console.log(err);
-                    return;
+              navigator.mediaDevices
+                .getUserMedia({ video: true, audio: true })
+                .then(
+                  (stream) => {
+                    setUser2Stream(stream);
+                    call.answer(stream); // Answer the call with an A/V stream.
+                    call.on("stream", (remoteStream) => {
+                      setUser1Stream(remoteStream);
+                    });
+                  },
+                  (err) => {
+                    console.error("Failed to get local stream", err);
                   }
-                  setUser2Stream(stream);
-                  call.answer(stream); // Answer the call with an A/V stream.
-                  call.on("stream", (remoteStream) => {
-                    setUser1Stream(remoteStream);
-                  });
-                },
-                (err) => {
-                  console.error("Failed to get local stream", err);
-                }
-              );
+                );
             });
           }
         }
@@ -121,17 +109,6 @@ const Details = ({ matchId, me }) => {
       }
     });
   }, [matchId, me, peer]);
-
-  // useEffect(() => {
-  //   console.log("hi");
-  //     if (err) {
-  //       console.log(err);
-  //       return;
-  //     } else {
-  //       setStream(stream);
-  //     }
-  //   });
-  // }, []);
 
   return (
     <>
