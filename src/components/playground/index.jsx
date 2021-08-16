@@ -21,7 +21,6 @@ const Playground = () => {
   const { matchId } = useParams();
   const [matchIdChecked, setMatchIdChecked] = useState(false);
   const [matchFound, setMatchFound] = useState(false);
-
   const [me, setMe] = useState(0);
 
   useEffect(() => {

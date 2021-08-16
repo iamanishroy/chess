@@ -1,3 +1,5 @@
+@import "util/media";
+
 .panel {
   width: 100%;
   // background-color: rgb(73, 116, 153);
@@ -17,6 +19,13 @@
   .users {
     .user {
       margin: 0 6%;
+      @include tablet {
+        margin: 2% 4%;
+      }
+      @include phone {
+        margin: 1% 2%;
+      }
+
       &:first-child {
         margin-bottom: 12px;
       }

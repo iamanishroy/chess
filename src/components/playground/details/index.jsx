@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useAuth } from "contexts/auth";
 import useOnlineStatus from "hooks/useOnlineStatus";
 import { db } from "adapter";
+import useScreenSize from "hooks/useScreenSize";
 import Peer from "peerjs";
+
 import "./style.scss";
 
 const User = ({
@@ -25,6 +27,8 @@ const User = ({
 
   const [remoteVideo, setRemoteVideo] = useState(false);
   const [remoteAudio, setRemoteAudio] = useState(false);
+
+  const [screenType] = useScreenSize();
 
   const toggleStream = (type) => {
     if (me === userNo) {
@@ -59,11 +63,12 @@ const User = ({
   }, [matchId, me, userNo, online, currentUser]);
   useEffect(() => {
     if (me !== userNo && stream) {
-      stream.getAudioTracks()[0].enabled = remoteAudio;
+      stream.getAudioTracks()[0].enabled =
+        screenType.tablet || screenType.phone ? false : remoteAudio;
       stream.getVideoTracks()[0].enabled = remoteVideo;
     }
     video.current.srcObject = stream;
-  }, [stream, me, userNo, remoteAudio, remoteVideo]);
+  }, [stream, me, userNo, remoteAudio, remoteVideo, screenType]);
   return (
     <div className="user">
       <div className="bar">
@@ -84,17 +89,24 @@ const User = ({
           >
             🔊
           </button>
-          <button
-            onClick={() => {
-              toggleStream(0);
-            }}
-          >
-            📷
-          </button>
+          {!screenType.tablet && !screenType.phone && (
+            <button
+              onClick={() => {
+                toggleStream(0);
+              }}
+            >
+              📷
+            </button>
+          )}
         </div>
       </div>
       {me !== userNo && localVideo}
-      <div className="video">
+      <div
+        className="video"
+        style={{
+          display: screenType.tablet || screenType.phone ? "none" : "unset",
+        }}
+      >
         <video
           id="webcamVideo"
           ref={video}
@@ -118,28 +130,32 @@ const Details = ({ matchId, me }) => {
   const [localVideo, setLocalVideo] = useState(false);
   const [localAudio, setLocalAudio] = useState(false);
 
+  const [screenType] = useScreenSize();
+
   useEffect(() => {
     if (me === 1) {
       if (user1Stream) {
-        user1Stream.getVideoTracks()[0].enabled = localVideo;
+        user1Stream.getVideoTracks()[0].enabled =
+          screenType.tablet || screenType.phone ? false : localVideo;
       }
     } else {
       if (user2Stream) {
         user2Stream.getVideoTracks()[0].enabled = localVideo;
       }
     }
-  }, [localVideo, me, user1Stream, user2Stream]);
+  }, [localVideo, me, user1Stream, user2Stream, screenType]);
   useEffect(() => {
     if (me === 1) {
       if (user1Stream) {
-        user1Stream.getAudioTracks()[0].enabled = localAudio;
+        user1Stream.getAudioTracks()[0].enabled =
+          screenType.tablet || screenType.phone ? false : localAudio;
       }
     } else {
       if (user2Stream) {
         user2Stream.getAudioTracks()[0].enabled = localAudio;
       }
     }
-  }, [localAudio, me, user1Stream, user2Stream]);
+  }, [localAudio, me, user1Stream, user2Stream, screenType]);
   useEffect(() => {
     db.ref("match/" + matchId + "/u2").on("value", (snapshot) => {
       if (snapshot.val()) {

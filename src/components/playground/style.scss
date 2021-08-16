@@ -1,15 +1,37 @@
+@import "util/media";
+
 .playground {
   width: 80vw;
   height: 100vh;
   display: flex;
   margin: auto;
   justify-content: space-between;
-  align-items: center;
+  // align-items: center;
+
+  @include smallDesktop {
+    width: 98vw;
+  }
+
+  @include tablet {
+    flex-direction: column;
+    justify-content: unset;
+  }
 
   .left {
     width: 40%;
+    @include tablet {
+      width: 50%;
+      margin: 3rem 0 2rem;
+    }
+    @include phone {
+      width: 100%;
+      margin: 2rem 0;
+    }
   }
   .right {
     width: 58%;
+    @include tablet {
+      width: 100%;
+    }
   }
 }
