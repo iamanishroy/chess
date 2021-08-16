@@ -61,6 +61,7 @@ const User = ({ userNo, matchId, me, stream }) => {
   );
 };
 
+let u2PrevState = "";
 const Details = ({ matchId, me }) => {
   const { currentUser } = useAuth();
   const peer = useMemo(() => new Peer(currentUser.uid), [currentUser]);
@@ -71,39 +72,50 @@ const Details = ({ matchId, me }) => {
     db.ref("match/" + matchId + "/u2").on("value", (snapshot) => {
       if (snapshot.val()) {
         setU2(true);
-        if (me === 1) {
-          // if previous was away then don't call
-          getUserMedia((err, stream) => {
-            if (err) {
-              console.log(err);
-              return;
-            }
-            setUser1Stream(stream);
-            const call = peer.call(snapshot.val().u, stream);
-            call.on("stream", (remoteStream) => {
-              setUser2Stream(remoteStream);
-            });
-          });
-        } else {
-          peer.on("call", (call) => {
-            getUserMedia(
-              (err, stream) => {
-                if (err) {
-                  console.log(err);
-                  return;
-                }
-                setUser2Stream(stream);
-                call.answer(stream); // Answer the call with an A/V stream.
-                call.on("stream", (remoteStream) => {
-                  setUser1Stream(remoteStream);
-                });
-              },
-              (err) => {
-                console.error("Failed to get local stream", err);
+        let u2 = snapshot.val();
+        if (
+          u2.o === "online" &&
+          u2PrevState !== "away" &&
+          u2PrevState !== "online"
+        ) {
+          if (me === 1) {
+            // if previous was away then don't call
+            getUserMedia({ video: true, audio: false }, (err, stream) => {
+              if (err) {
+                console.log(err);
+                return;
               }
-            );
-          });
+              setUser1Stream(stream);
+              console.log("calling...");
+              const call = peer.call(u2.u, stream);
+              call.on("stream", (remoteStream) => {
+                setUser2Stream(remoteStream);
+              });
+            });
+          } else {
+            peer.on("call", (call) => {
+              console.log(call);
+              getUserMedia(
+                { video: true, audio: false },
+                (err, stream) => {
+                  if (err) {
+                    console.log(err);
+                    return;
+                  }
+                  setUser2Stream(stream);
+                  call.answer(stream); // Answer the call with an A/V stream.
+                  call.on("stream", (remoteStream) => {
+                    setUser1Stream(remoteStream);
+                  });
+                },
+                (err) => {
+                  console.error("Failed to get local stream", err);
+                }
+              );
+            });
+          }
         }
+        u2PrevState = u2.o;
       } else {
         setU2(false);
       }
