@@ -5,7 +5,16 @@ import { db } from "adapter";
 import Peer from "peerjs";
 import "./style.scss";
 
-const User = ({ userNo, matchId, me, stream }) => {
+const User = ({
+  userNo,
+  matchId,
+  me,
+  stream,
+  localAudio,
+  localVideo,
+  setLocalAudio,
+  setLocalVideo,
+}) => {
   const { currentUser } = useAuth();
   const [playerPhotoURL, setPlayerPhotoURL] = useState("");
   const [playerName, setPlayerName] = useState("");
@@ -13,6 +22,25 @@ const User = ({ userNo, matchId, me, stream }) => {
 
   const online = useOnlineStatus();
   const video = useRef();
+
+  const [remoteVideo, setRemoteVideo] = useState(false);
+  const [remoteAudio, setRemoteAudio] = useState(false);
+
+  const toggleStream = (type) => {
+    if (me === userNo) {
+      if (type === 0) {
+        setLocalVideo(!localVideo);
+      } else {
+        setLocalAudio(!localAudio);
+      }
+    } else {
+      if (type === 0) {
+        setRemoteVideo(!remoteVideo);
+      } else {
+        setRemoteAudio(!remoteAudio);
+      }
+    }
+  };
 
   useEffect(() => {
     if (userNo === me) {
@@ -30,8 +58,12 @@ const User = ({ userNo, matchId, me, stream }) => {
     }
   }, [matchId, me, userNo, online, currentUser]);
   useEffect(() => {
+    if (me !== userNo && stream) {
+      stream.getAudioTracks()[0].enabled = remoteAudio;
+      stream.getVideoTracks()[0].enabled = remoteVideo;
+    }
     video.current.srcObject = stream;
-  }, [stream]);
+  }, [stream, me, userNo, remoteAudio, remoteVideo]);
   return (
     <div className="user">
       <div className="bar">
@@ -45,12 +77,31 @@ const User = ({ userNo, matchId, me, stream }) => {
           </div>
         </div>
         <div className="actions">
-          <button>🔊</button>
-          <button>📷</button>
+          <button
+            onClick={() => {
+              toggleStream(1);
+            }}
+          >
+            🔊
+          </button>
+          <button
+            onClick={() => {
+              toggleStream(0);
+            }}
+          >
+            📷
+          </button>
         </div>
       </div>
+      {me !== userNo && localVideo}
       <div className="video">
-        <video id="webcamVideo" ref={video} autoPlay playsInline></video>
+        <video
+          id="webcamVideo"
+          ref={video}
+          autoPlay
+          playsInline
+          muted={me === userNo}
+        ></video>
       </div>
     </div>
   );
@@ -63,6 +114,32 @@ const Details = ({ matchId, me }) => {
   const [u2, setU2] = useState(false);
   const [user1Stream, setUser1Stream] = useState();
   const [user2Stream, setUser2Stream] = useState();
+
+  const [localVideo, setLocalVideo] = useState(false);
+  const [localAudio, setLocalAudio] = useState(false);
+
+  useEffect(() => {
+    if (me === 1) {
+      if (user1Stream) {
+        user1Stream.getVideoTracks()[0].enabled = localVideo;
+      }
+    } else {
+      if (user2Stream) {
+        user2Stream.getVideoTracks()[0].enabled = localVideo;
+      }
+    }
+  }, [localVideo, me, user1Stream, user2Stream]);
+  useEffect(() => {
+    if (me === 1) {
+      if (user1Stream) {
+        user1Stream.getAudioTracks()[0].enabled = localAudio;
+      }
+    } else {
+      if (user2Stream) {
+        user2Stream.getAudioTracks()[0].enabled = localAudio;
+      }
+    }
+  }, [localAudio, me, user1Stream, user2Stream]);
   useEffect(() => {
     db.ref("match/" + matchId + "/u2").on("value", (snapshot) => {
       if (snapshot.val()) {
@@ -83,7 +160,8 @@ const Details = ({ matchId, me }) => {
                 call.on("stream", (remoteStream) => {
                   setUser2Stream(remoteStream);
                 });
-              });
+              })
+              .catch(() => {});
           } else {
             peer.on("call", (call) => {
               navigator.mediaDevices
@@ -108,7 +186,7 @@ const Details = ({ matchId, me }) => {
         setU2(false);
       }
     });
-  }, [matchId, me, peer]);
+  }, [matchId, me, peer, localAudio, localVideo]);
 
   return (
     <>
@@ -119,13 +197,40 @@ const Details = ({ matchId, me }) => {
 
         <div className="users">
           {me === 2 && (
-            <User userNo={1} matchId={matchId} me={me} stream={user1Stream} />
+            <User
+              userNo={1}
+              matchId={matchId}
+              me={me}
+              stream={user1Stream}
+              localAudio={localAudio}
+              setLocalAudio={setLocalAudio}
+              localVideo={localVideo}
+              setLocalVideo={setLocalVideo}
+            />
           )}
           {u2 && (
-            <User userNo={2} matchId={matchId} me={me} stream={user2Stream} />
+            <User
+              userNo={2}
+              matchId={matchId}
+              me={me}
+              stream={user2Stream}
+              localAudio={localAudio}
+              setLocalAudio={setLocalAudio}
+              localVideo={localVideo}
+              setLocalVideo={setLocalVideo}
+            />
           )}
           {me === 1 && (
-            <User userNo={1} matchId={matchId} me={me} stream={user1Stream} />
+            <User
+              userNo={1}
+              matchId={matchId}
+              me={me}
+              stream={user1Stream}
+              localAudio={localAudio}
+              setLocalAudio={setLocalAudio}
+              localVideo={localVideo}
+              setLocalVideo={setLocalVideo}
+            />
           )}
         </div>
       </div>
