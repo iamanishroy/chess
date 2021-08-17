@@ -95,8 +95,7 @@ const User = ({
               toggleStream(1);
             }}
           >
-            {(me === userNo && !localAudio) ||
-            (me !== userNo && !remoteAudio) ? (
+            {(me === userNo && localAudio) || (me !== userNo && remoteAudio) ? (
               <img src={micOn} alt="mic-on" />
             ) : (
               <img src={micOff} alt="mic-off" />
@@ -108,8 +107,8 @@ const User = ({
                 toggleStream(0);
               }}
             >
-              {(me === userNo && !localVideo) ||
-              (me !== userNo && !remoteVideo) ? (
+              {(me === userNo && localVideo) ||
+              (me !== userNo && remoteVideo) ? (
                 <img src={videoOn} alt="video-on" />
               ) : (
                 <img src={videoOff} alt="video-off" />
