@@ -5,6 +5,10 @@ import { db } from "adapter";
 import useScreenSize from "hooks/useScreenSize";
 import Peer from "peerjs";
 
+import micOn from "./assets/mic-on.svg";
+import micOff from "./assets/mic-off.svg";
+import videoOn from "./assets/video-on.svg";
+import videoOff from "./assets/video-off.svg";
 import "./style.scss";
 
 const User = ({
@@ -33,13 +37,17 @@ const User = ({
   const toggleStream = (type) => {
     if (me === userNo) {
       if (type === 0) {
-        setLocalVideo(!localVideo);
+        setLocalVideo(
+          screenType.tablet || screenType.phone ? false : !localVideo
+        );
       } else {
         setLocalAudio(!localAudio);
       }
     } else {
       if (type === 0) {
-        setRemoteVideo(!remoteVideo);
+        setRemoteVideo(
+          screenType.tablet || screenType.phone ? false : !remoteVideo
+        );
       } else {
         setRemoteAudio(!remoteAudio);
       }
@@ -87,7 +95,12 @@ const User = ({
               toggleStream(1);
             }}
           >
-            🔊
+            {(me === userNo && !localAudio) ||
+            (me !== userNo && !remoteAudio) ? (
+              <img src={micOn} alt="mic-on" />
+            ) : (
+              <img src={micOff} alt="mic-off" />
+            )}
           </button>
           {!screenType.tablet && !screenType.phone && (
             <button
@@ -95,7 +108,12 @@ const User = ({
                 toggleStream(0);
               }}
             >
-              📷
+              {(me === userNo && !localVideo) ||
+              (me !== userNo && !remoteVideo) ? (
+                <img src={videoOn} alt="video-on" />
+              ) : (
+                <img src={videoOff} alt="video-off" />
+              )}
             </button>
           )}
         </div>
