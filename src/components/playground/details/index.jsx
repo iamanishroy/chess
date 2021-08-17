@@ -225,7 +225,7 @@ const Details = ({ matchId, me }) => {
     <>
       <div className="panel">
         <div className="tab">
-          <span>chat</span>
+          <span>match id : {matchId}</span>
         </div>
 
         <div className="users">
