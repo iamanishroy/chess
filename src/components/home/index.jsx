@@ -16,7 +16,6 @@ const Home = () => {
     startLinkGame(currentUser)
       .then((matchId) => {
         if (matchId) {
-          alert(matchId);
           history.push("/play/" + matchId);
         } else {
           console.log("error");

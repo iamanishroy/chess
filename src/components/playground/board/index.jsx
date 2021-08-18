@@ -22,9 +22,11 @@ const Board = ({ matchId, me }) => {
         game.load(snapshot.val().fen);
         setPositions(game.board());
         // last box
-        document.getElementById(
-          snapshot.val().l[0] + snapshot.val().l[1]
-        ).style.backgroundColor = "#3f51b5";
+        if (snapshot.val().l) {
+          document.getElementById(
+            snapshot.val().l[0] + snapshot.val().l[1]
+          ).style.backgroundColor = "#3f51b5";
+        }
         // check for over
         if (game.game_over()) {
           // draw

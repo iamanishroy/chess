@@ -4,7 +4,7 @@ import useOnlineStatus from "hooks/useOnlineStatus";
 import { db } from "adapter";
 import useScreenSize from "hooks/useScreenSize";
 import Peer from "peerjs";
-
+import ModalShare from "../popup";
 import micOn from "./assets/mic-on.svg";
 import micOff from "./assets/mic-off.svg";
 import videoOn from "./assets/video-on.svg";
@@ -71,9 +71,11 @@ const User = ({
   }, [matchId, me, userNo, online, currentUser]);
   useEffect(() => {
     if (me !== userNo && stream) {
-      stream.getAudioTracks()[0].enabled =
-        screenType.tablet || screenType.phone ? false : remoteAudio;
-      stream.getVideoTracks()[0].enabled = remoteVideo;
+      try {
+        stream.getAudioTracks()[0].enabled =
+          screenType.tablet || screenType.phone ? false : remoteAudio;
+        stream.getVideoTracks()[0].enabled = remoteVideo;
+      } catch (e) {}
     }
     video.current.srcObject = stream;
   }, [stream, me, userNo, remoteAudio, remoteVideo, screenType]);
@@ -86,7 +88,19 @@ const User = ({
           </div>
           <div className="text">
             <div className="name">{playerName}</div>
-            <div className="status">{playerStatus}</div>
+            <div
+              className="status"
+              style={{
+                color:
+                  playerStatus === "online"
+                    ? "green"
+                    : playerStatus === "offline"
+                    ? "red"
+                    : "coral",
+              }}
+            >
+              {playerStatus}
+            </div>
           </div>
         </div>
         <div className="actions">
@@ -152,12 +166,16 @@ const Details = ({ matchId, me }) => {
   useEffect(() => {
     if (me === 1) {
       if (user1Stream) {
-        user1Stream.getVideoTracks()[0].enabled =
-          screenType.tablet || screenType.phone ? false : localVideo;
+        try {
+          user1Stream.getVideoTracks()[0].enabled =
+            screenType.tablet || screenType.phone ? false : localVideo;
+        } catch (e) {}
       }
     } else {
       if (user2Stream) {
-        user2Stream.getVideoTracks()[0].enabled = localVideo;
+        try {
+          user2Stream.getVideoTracks()[0].enabled = localVideo;
+        } catch (e) {}
       }
     }
   }, [localVideo, me, user1Stream, user2Stream, screenType]);
@@ -186,7 +204,7 @@ const Details = ({ matchId, me }) => {
           if (me === 1) {
             // if previous was away then don't call
             navigator.mediaDevices
-              .getUserMedia({ video: true, audio: true })
+              .getUserMedia({ video: localVideo, audio: true })
               .then((stream) => {
                 setUser1Stream(stream);
                 const call = peer.call(u2.u, stream);
@@ -198,7 +216,7 @@ const Details = ({ matchId, me }) => {
           } else {
             peer.on("call", (call) => {
               navigator.mediaDevices
-                .getUserMedia({ video: true, audio: true })
+                .getUserMedia({ video: localVideo, audio: true })
                 .then(
                   (stream) => {
                     setUser2Stream(stream);
@@ -220,14 +238,21 @@ const Details = ({ matchId, me }) => {
       }
     });
   }, [matchId, me, peer, localAudio, localVideo]);
-
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   return (
     <>
       <div className="panel">
         <div className="tab">
           <span>match id : {matchId}</span>
+          <span
+            onClick={() => {
+              setShareModalOpen(true);
+            }}
+          >
+            invite
+          </span>
         </div>
-
+        <ModalShare open={shareModalOpen} setOpen={setShareModalOpen} />
         <div className="users">
           {me === 2 && (
             <User

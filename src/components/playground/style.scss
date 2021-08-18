@@ -6,7 +6,7 @@
   display: flex;
   margin: auto;
   justify-content: space-between;
-  // align-items: center;
+  align-items: center;
 
   @include smallDesktop {
     width: 98vw;
@@ -15,10 +15,12 @@
   @include tablet {
     flex-direction: column;
     justify-content: unset;
+    align-items: unset;
   }
 
   .left {
     width: 40%;
+    height: 90%;
     @include tablet {
       width: 50%;
       margin: 3rem 0 2rem;

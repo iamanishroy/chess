@@ -1,0 +1,29 @@
+/* examples/custom-styling.css */
+.customOverlay {
+  background: rgba(54, 54, 54, 0.7);
+}
+.customModal {
+  width: 430px;
+  overflow: hidden;
+  padding: 0;
+  background-color: transparent;
+}
+.customClose {
+  color: #878787;
+  font-size: 17px;
+  background: #f2f3fb;
+  height: 33px;
+  width: 33px;
+  cursor: pointer;
+  margin-top: 15px;
+  &:hover {
+    background: #ebedf9;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+  }
+}
