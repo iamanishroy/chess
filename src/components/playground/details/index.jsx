@@ -255,7 +255,7 @@ const Details = ({ matchId, me }) => {
         <ModalShare
           showModal={shareModalOpen}
           setShowModal={setShareModalOpen}
-          link="www.aaaa.sss"
+          link={`better-chess.vercel.app/play/${matchId}`}
         />
         <div className="users">
           {me === 2 && (
