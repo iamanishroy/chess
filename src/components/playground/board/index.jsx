@@ -15,11 +15,16 @@ const Board = ({ matchId, me }) => {
   const [positions, setPositions] = useState(game.board());
 
   useEffect(() => {
-    db.ref("match/" + matchId + "/fen").on("value", (snapshot) => {
+    db.ref("match/" + matchId + "/brd").on("value", (snapshot) => {
+      // #3f51b5
       if (snapshot.val()) {
         // check if previous(own move) then don't change/ execute TODO:
-        game.load(snapshot.val());
+        game.load(snapshot.val().fen);
         setPositions(game.board());
+        // last box
+        document.getElementById(
+          snapshot.val().l[0] + snapshot.val().l[1]
+        ).style.backgroundColor = "#3f51b5";
         // check for over
         if (game.game_over()) {
           // draw
@@ -63,7 +68,7 @@ const Board = ({ matchId, me }) => {
             setCurrentSelected(null);
             // console.log(game.fen());
             setPositions(game.board());
-            updateFEN(matchId, game.fen());
+            updateFEN(matchId, game.fen(), [l, i]);
             // if (game.game_over()) {
             //   alert(
             //     `game over winner:- ${game.turn()} -> ${

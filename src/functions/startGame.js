@@ -13,7 +13,10 @@ const startLinkGame = (user) => {
         p: user.photoURL,
         n: user.displayName,
       },
-      fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      brd: {
+        fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        l: null,
+      },
     })
     .then(() => {
       return matchId;
