@@ -1,29 +1,80 @@
-/* examples/custom-styling.css */
-.customOverlay {
-  background: rgba(54, 54, 54, 0.7);
+.modal-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 20;
 }
-.customModal {
-  width: 430px;
-  overflow: hidden;
-  padding: 0;
-  background-color: transparent;
-}
-.customClose {
-  color: #878787;
-  font-size: 17px;
-  background: #f2f3fb;
-  height: 33px;
-  width: 33px;
-  cursor: pointer;
-  margin-top: 15px;
-  &:hover {
-    background: #ebedf9;
-  }
-  a {
+.qmotic-modal {
+  position: absolute;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: -2px 2px 20px 0px #0000004a;
+  border-radius: 30px;
+  width: 85vw;
+  background-color: #ffffff;
+
+  & .container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    border-radius: 50%;
     justify-content: center;
-    transition: all 0.3s ease-in-out;
+    margin: 20px 40px;
+
+    & .icon {
+      font-size: 4rem;
+      //   color: #fbc63e;
+      &.tick svg path {
+        fill: #548100;
+      }
+      &.exclamation svg path {
+        fill: #fbc63e;
+      }
+      &.cros svg path {
+        fill: red;
+      }
+    }
+    & .header {
+      width: 100%;
+    }
+    & .heading {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 20px auto 12px auto;
+    }
+    & .message {
+      font-size: 1rem;
+      font-weight: 400;
+      text-align: center;
+    }
+    & .button {
+      & button {
+        font-weight: 600;
+        height: 2.5rem;
+        font-size: 1rem;
+        width: 5rem;
+        margin: 20px;
+        border: none;
+        background: #ffffff;
+        color: #00000e;
+        box-shadow: -2px 2px 10px 1px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 600px) {
+  .qmotic-modal {
+    width: 400px;
   }
 }

@@ -252,7 +252,11 @@ const Details = ({ matchId, me }) => {
             invite
           </span>
         </div>
-        <ModalShare open={shareModalOpen} setOpen={setShareModalOpen} />
+        <ModalShare
+          showModal={shareModalOpen}
+          setShowModal={setShareModalOpen}
+          link="www.aaaa.sss"
+        />
         <div className="users">
           {me === 2 && (
             <User
