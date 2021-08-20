@@ -72,9 +72,9 @@ const User = ({
   useEffect(() => {
     if (me !== userNo && stream) {
       try {
-        stream.getAudioTracks()[0].enabled =
-          screenType.tablet || screenType.phone ? false : remoteAudio;
-        stream.getVideoTracks()[0].enabled = remoteVideo;
+        stream.getAudioTracks()[0].enabled = remoteAudio;
+        stream.getVideoTracks()[0].enabled =
+          screenType.tablet || screenType.phone ? false : remoteVideo;
       } catch (e) {}
     }
     video.current.srcObject = stream;
@@ -174,7 +174,8 @@ const Details = ({ matchId, me }) => {
     } else {
       if (user2Stream) {
         try {
-          user2Stream.getVideoTracks()[0].enabled = localVideo;
+          user2Stream.getVideoTracks()[0].enabled =
+            screenType.tablet || screenType.phone ? false : localVideo;
         } catch (e) {}
       }
     }
@@ -182,8 +183,7 @@ const Details = ({ matchId, me }) => {
   useEffect(() => {
     if (me === 1) {
       if (user1Stream) {
-        user1Stream.getAudioTracks()[0].enabled =
-          screenType.tablet || screenType.phone ? false : localAudio;
+        user1Stream.getAudioTracks()[0].enabled = localAudio;
       }
     } else {
       if (user2Stream) {
