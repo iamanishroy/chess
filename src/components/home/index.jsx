@@ -46,8 +46,8 @@ const Home = () => {
               {currentUser.displayName} <span onClick={signOut}>🚪</span>
             </h2>
             <h3>{currentUser.email}</h3>
-            <p>12 matches played</p>
-            <p>12 matches won</p>
+            {/* <p>12 matches played</p>
+            <p>12 matches won</p> */}
           </div>
         </div>
         <div className="cta">
